@@ -1,3 +1,4 @@
+
 @import '../../../settings/Settings';
 
 .InsertLabelNamesPopup {
@@ -11,40 +12,6 @@
   align-self: stretch;
   flex: 1;
   min-height: 400px;
-
-  .LeftContainer {
-    width: 50px;
-    align-self: stretch;
-    border-right: solid 1px $darkThemeFirstColor;
-
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: center;
-    align-content: flex-start;
-    padding: 3px 0;
-
-    .ImageButton {
-      transition: transform 0.3s;
-
-      &:hover {
-        border-radius: 3px;
-        background-color: rgba(0, 0, 0, 0.2);
-      }
-
-      &.active {
-        border-radius: 3px;
-        background-color: rgba(0, 0, 0, 0.4);
-      }
-
-      &.monochrome {
-        img {
-          filter: brightness(0) invert(1);
-        }
-      }
-    }
-  }
 
   .RightContainer {
     align-self: stretch;
@@ -61,39 +28,27 @@
       align-self: stretch;
       color: white;
       font-size: 15px;
-      padding: 30px 40px;
+      padding: 26px 40px;
       border-bottom: solid 1px $darkThemeFirstColor;
     }
 
     .LabelsContainer {
       align-self: stretch;
       flex: 1;
+      min-height: 0;
 
       display: flex;
       flex-direction: column;
       flex-wrap: nowrap;
       justify-content: center;
-      align-items: center;
-      align-content: center;
+      align-items: stretch;
+      align-content: stretch;
 
       color: white;
 
-      .ImageButton {
-        transition: transform 0.3s;
-
-        img {
-          filter: brightness(0) invert(1);
-          user-select: none;
-        }
-
-        &:hover {
-          background-color: transparent;
-        }
-
-        &:not(.disabled):hover {
-          filter: brightness(35%) sepia(100%) hue-rotate(172deg) saturate(2000%); // fallback if new css variables are not supported by browser
-          filter: brightness(35%) sepia(100%) hue-rotate(var(--hue-value)) saturate(2000%);
-        }
+      .LabelsScrollArea {
+        flex: 1;
+        min-height: 0;
       }
 
       .EmptyList {
@@ -130,28 +85,58 @@
           }
         }
       }
+
+      .AddLabelButton {
+        height: 46px;
+        margin: 12px 40px 18px 40px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 3px;
+        background-color: rgba(255, 255, 255, 0.08);
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        img {
+          width: 16px;
+          height: 16px;
+          filter: brightness(0) invert(1);
+        }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.14);
+        }
+      }
     }
 
     .InsertLabelNamesPopupContent {
       margin-left: 40px;
-      margin-right: 10px;
-      margin-top: 20px;
+      margin-right: 40px;
+      margin-top: 18px;
+      margin-bottom: 10px;
 
       .LabelEntry {
         width: 100%;
+        min-height: 52px;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         justify-content: flex-start;
         align-items: center;
-        align-content: space-between;
+        align-content: center;
 
         .ColorSelectorView {
-          margin-left: 15px;
+          margin-left: 14px;
         }
 
         .ImageButton {
-          margin-left: 15px;
+          margin-left: 14px;
 
           img {
             filter: brightness(0) invert(1);

@@ -14,7 +14,14 @@ export class ExporterUtil {
         try {
             saveAs(blob, fileName);
         } catch (error) {
-            // TODO: Implement file save error handling
+            throw new Error(error as string);
+        }
+    }
+
+    public static saveBlob(blob: Blob, fileName: string): void {
+        try {
+            saveAs(blob, fileName);
+        } catch (error) {
             throw new Error(error as string);
         }
     }

@@ -1,22 +1,65 @@
+
 .ColorSelectorView {
+  position: relative;
   width: 30px;
   height: 30px;
-  border-radius: 2px;
+  flex-shrink: 0;
 
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
+  .ColorSelectorButton {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-sizing: border-box;
 
-  > img {
-    filter: brightness(0) invert(1);
-    width: 20px;
-    height: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+
+    > img {
+      filter: brightness(0) invert(1);
+      width: 16px;
+      height: 16px;
+      opacity: 0.95;
+    }
+
+    &:hover {
+      cursor: pointer;
+      border-color: white;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+    }
   }
 
-  &:hover {
+  .ColorPalette {
+    position: absolute;
+    top: 36px;
+    right: 0;
+    z-index: 1000;
+    width: 132px;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #111111;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+
+    display: grid;
+    grid-template-columns: repeat(4, 24px);
+    gap: 6px;
+  }
+
+  .ColorPaletteOption {
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
     cursor: pointer;
+    padding: 0;
+
+    &:hover {
+      border-color: white;
+      transform: scale(1.08);
+    }
   }
 }

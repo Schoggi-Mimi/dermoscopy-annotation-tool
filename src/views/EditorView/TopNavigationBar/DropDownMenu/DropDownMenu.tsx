@@ -6,6 +6,8 @@ import {EventType} from '../../../../data/enums/EventType';
 import {updatePreventCustomCursorStatus} from '../../../../store/general/actionCreators';
 import {AppState} from '../../../../store';
 import {connect} from 'react-redux';
+import {PolygonLabelsExporter} from '../../../../logic/export/polygon/PolygonLabelsExporter';
+import {AnnotationFormatType} from '../../../../data/enums/AnnotationFormatType';
 
 interface IProps {
     updatePreventCustomCursorStatusAction: (preventCustomCursor: boolean) => any;
@@ -16,6 +18,8 @@ const DropDownMenu: React.FC<IProps> = ({updatePreventCustomCursorStatusAction})
 
     const [activeTabIdx, setActiveTabIdx] = useState(null);
     const [activeDropDownAnchor, setDropDownAnchor] = useState(null);
+    const visibleDropDownMenuData: DropDownMenuNode[] = DropDownMenuData
+        .filter((data: DropDownMenuNode) => data.name !== 'Community');
 
     const onTabClick = (tabIdx: number, event) => {
         if (activeTabIdx === null) {
@@ -68,8 +72,26 @@ const DropDownMenu: React.FC<IProps> = ({updatePreventCustomCursorStatusAction})
         );
     }
 
+    const getVisibleChildren = (data: DropDownMenuNode): DropDownMenuNode[] => {
+        if (data.name !== 'Actions') return data.children;
+
+        return data.children.filter((element: DropDownMenuNode) =>
+            element.name === 'Edit Labels' ||
+            element.name === 'Import Images' ||
+            element.name === 'Export Annotations'
+        );
+    }
+
+    const getOptionOnClick = (element: DropDownMenuNode): (() => void) => {
+        if (element.name === 'Export Annotations') {
+            return () => PolygonLabelsExporter.export(AnnotationFormatType.PNG_MASK);
+        }
+
+        return element.onClick;
+    }
+
     const getDropDownContent = () => {
-        return DropDownMenuData.map((data: DropDownMenuNode, index: number) => getDropDownTab(data, index))
+        return visibleDropDownMenuData.map((data: DropDownMenuNode, index: number) => getDropDownTab(data, index))
     }
 
     const wrapOnClick = (onClick?: () => void, disabled?: boolean): () => void => {
@@ -99,11 +121,12 @@ const DropDownMenu: React.FC<IProps> = ({updatePreventCustomCursorStatusAction})
     }
 
     const getDropDownWindow = (data: DropDownMenuNode) => {
-        if (activeTabIdx !== null) {
+        if (activeTabIdx !== null && !!data) {
+            const visibleChildren: DropDownMenuNode[] = getVisibleChildren(data);
             const style: React.CSSProperties = {
                 top: 35,
                 left: activeDropDownAnchor.x,
-                height: 40 * data.children.length + 10
+                height: 40 * visibleChildren.length + 10
             }
             return <div
                 className={'DropDownMenuContent'}
@@ -111,9 +134,9 @@ const DropDownMenu: React.FC<IProps> = ({updatePreventCustomCursorStatusAction})
                 onMouseEnter={onMouseEnterWindow}
                 onMouseLeave={onMouseLeaveWindow}
             >
-                {data.children.map((element: DropDownMenuNode, index: number) => {
+                {visibleChildren.map((element: DropDownMenuNode, index: number) => {
                     return <div className={getDropDownMenuContentOption(element.disabled)}
-                        onClick={wrapOnClick(element.onClick, element.disabled)}
+                        onClick={wrapOnClick(getOptionOnClick(element), element.disabled)}
                         key={index}
                     >
                         <div className='Marker'/>
@@ -129,7 +152,7 @@ const DropDownMenu: React.FC<IProps> = ({updatePreventCustomCursorStatusAction})
     return(<div className='DropDownMenuWrapper'>
         <>
             {getDropDownContent()}
-            {getDropDownWindow(DropDownMenuData[activeTabIdx])}
+            {activeTabIdx !== null && getDropDownWindow(visibleDropDownMenuData[activeTabIdx])}
         </>
     </div>)
 }

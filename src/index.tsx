@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.scss';
+import { Provider } from 'react-redux';
 import App from './App';
 import configureStore from './configureStore';
-import { Provider } from 'react-redux';
+import './index.scss';
 import { AppInitializer } from './logic/initializer/AppInitializer';
 
 export const store = configureStore();

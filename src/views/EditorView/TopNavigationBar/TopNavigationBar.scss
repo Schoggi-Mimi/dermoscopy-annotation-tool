@@ -38,6 +38,7 @@
 
       &.middle {
         flex: auto;
+        justify-content: flex-start;
       }
 
       &:not(:last-child) {
@@ -72,7 +73,8 @@
     }
 
     .TextInput {
-      max-width: 200px;
+      max-width: 260px;
+      width: 260px;
       height: 25px;
 
       &:hover {
@@ -110,8 +112,8 @@
       margin-right: 10px;
 
       > img {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         margin-right: 5px;
         user-select: none;
       }

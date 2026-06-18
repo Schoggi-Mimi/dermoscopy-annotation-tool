@@ -5,7 +5,7 @@ import {ImageData, LabelPoint, LabelRect} from '../../../store/labels/types';
 import {FileUtil} from '../../../utils/FileUtil';
 import {AppState} from '../../../store';
 import {connect} from 'react-redux';
-import {updateImageDataById} from '../../../store/labels/actionCreators';
+import {updateActiveLabelId, updateActiveLabelType, updateImageDataById} from '../../../store/labels/actionCreators';
 import {ImageRepository} from '../../../logic/imageRepository/ImageRepository';
 import {LabelType} from '../../../data/enums/LabelType';
 import {PopupWindowType} from '../../../data/enums/PopupWindowType';
@@ -34,6 +34,8 @@ interface IProps {
     imageData: ImageData;
     activeLabelType: LabelType;
     updateImageDataById: (id: string, newImageData: ImageData) => any;
+    updateActiveLabelType: (activeLabelType: LabelType) => any;
+    updateActiveLabelId: (activeLabelId: string) => any;
     activePopupType: PopupWindowType;
     activeLabelId: string;
     customCursorStyle: CustomCursorStyle;
@@ -115,7 +117,8 @@ class Editor extends React.Component<IProps, IState> {
         if (imageData.loadStatus) {
             EditorActions.setActiveImage(ImageRepository.getById(imageData.id));
             AIActions.detect(imageData.id, ImageRepository.getById(imageData.id));
-            this.updateModelAndRender()
+            this.updateModelAndRender();
+            this.activatePolygonToolAfterImageReady();
         }
         else {
             if (!EditorModel.isLoading) {
@@ -135,7 +138,8 @@ class Editor extends React.Component<IProps, IState> {
         EditorActions.setActiveImage(image);
         AIActions.detect(imageData.id, image);
         EditorActions.setLoadingStatus(false);
-        this.updateModelAndRender()
+        this.updateModelAndRender();
+        this.activatePolygonToolAfterImageReady();
     };
 
     private handleLoadImageError = () => {};
@@ -222,6 +226,15 @@ class Editor extends React.Component<IProps, IState> {
         }
     };
 
+    private activatePolygonToolAfterImageReady = () => {
+        window.setTimeout(() => {
+            this.props.updateActiveLabelType(LabelType.POLYGON);
+            this.props.updateActiveLabelId(null);
+            EditorActions.swapSupportRenderingEngine(LabelType.POLYGON);
+            EditorActions.fullRender();
+        }, 600);
+    };
+
     public render() {
         return (
             <div
@@ -269,7 +282,9 @@ class Editor extends React.Component<IProps, IState> {
 }
 
 const mapDispatchToProps = {
-    updateImageDataById
+    updateImageDataById,
+    updateActiveLabelType,
+    updateActiveLabelId
 };
 
 const mapStateToProps = (state: AppState) => ({

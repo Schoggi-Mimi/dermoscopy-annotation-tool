@@ -1,15 +1,23 @@
-import {LabelsActionTypes, LabelsState, ImageData} from './types';
-import {Action} from '../Actions';
+import { Action } from '../Actions';
+import { ImageData, LabelsActionTypes, LabelsState } from './types';
+import { LabelType } from '../../data/enums/LabelType';
 
 const initialState: LabelsState = {
     activeImageIndex: null,
-    activeLabelNameId: null,
-    activeLabelType: null,
+    activeLabelNameId: 'diagnostic_region',
+    activeLabelType: LabelType.RECT,
     activeLabelId: null,
     highlightedLabelId: null,
     imagesData: [],
-    firstLabelCreatedFlag: false,
-    labels: []
+    firstLabelCreatedFlag: true,
+    labels: [
+        { id: 'diagnostic_region', name: 'diagnostic_region', color: '#FF0000' },
+        { id: 'suspicious_pigment', name: 'suspicious_pigment', color: '#FF9900' },
+        { id: 'irregular_border', name: 'irregular_border', color: '#00AAFF' },
+        { id: 'asymmetry_region', name: 'asymmetry_region', color: '#AA00FF' },
+        { id: 'structure_pattern_region', name: 'structure_pattern_region', color: '#00CC66' },
+        { id: 'artifact_ignore', name: 'artifact_ignore', color: '#999999' }
+    ]
 };
 
 export function labelsReducer(

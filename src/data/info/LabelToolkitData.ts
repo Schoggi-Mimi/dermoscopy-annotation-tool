@@ -40,7 +40,7 @@ export const LabelToolkitData: ILabelToolkit[] = [
     },
     {
         labelType: LabelType.POLYGON,
-        headerText: 'Polygon',
+        headerText: 'Annotation',
         imageSrc: 'ico/polygon.png',
         imageAlt: 'polygon',
         projectType: ProjectType.OBJECT_DETECTION,

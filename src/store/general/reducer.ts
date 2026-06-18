@@ -14,7 +14,7 @@ const initialState: GeneralState = {
     enablePerClassColoration: true,
     projectData: {
         type: null,
-        name: 'my-project-name',
+        name: 'derm-annotation',
     },
     zoom: ViewPointSettings.MIN_ZOOM
 };

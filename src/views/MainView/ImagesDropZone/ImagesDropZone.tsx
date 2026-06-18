@@ -1,6 +1,6 @@
 import React, {PropsWithChildren} from 'react';
 import './ImagesDropZone.scss';
-import {useDropzone,DropzoneOptions} from 'react-dropzone';
+import {useDropzone, DropzoneOptions} from 'react-dropzone';
 import {TextButton} from '../../Common/TextButton/TextButton';
 import {ImageData} from '../../../store/labels/types';
 import {connect} from 'react-redux';
@@ -11,7 +11,7 @@ import {PopupWindowType} from '../../../data/enums/PopupWindowType';
 import {updateActivePopupType, updateProjectData} from '../../../store/general/actionCreators';
 import {ProjectData} from '../../../store/general/types';
 import {ImageDataUtil} from '../../../utils/ImageDataUtil';
-import { sortBy } from 'lodash';
+import {sortBy} from 'lodash';
 
 interface IProps {
     updateActiveImageIndexAction: (activeImageIndex: number) => any;
@@ -24,19 +24,19 @@ interface IProps {
 const ImagesDropZone: React.FC<IProps> = (props: PropsWithChildren<IProps>) => {
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
         accept: {
-            'image/*': ['.jpeg', '.png']
+            'image/*': ['.jpeg', '.jpg', '.png']
         }
     } as DropzoneOptions);
 
     const startEditor = (projectType: ProjectType) => {
         if (acceptedFiles.length > 0) {
-            const files = sortBy(acceptedFiles, (item: File) => item.name)
+            const files = sortBy(acceptedFiles, (item: File) => item.name);
             props.updateProjectDataAction({
                 ...props.projectData,
                 type: projectType
             });
             props.updateActiveImageIndexAction(0);
-            props.addImageDataAction(files.map((file:File) => ImageDataUtil
+            props.addImageDataAction(files.map((file: File) => ImageDataUtil
                 .createImageDataFromFileData(file)));
             props.updateActivePopupTypeAction(PopupWindowType.INSERT_LABEL_NAMES);
         }
@@ -77,8 +77,7 @@ const ImagesDropZone: React.FC<IProps> = (props: PropsWithChildren<IProps>) => {
             </>;
     };
 
-    const startEditorWithObjectDetection = () => startEditor(ProjectType.OBJECT_DETECTION)
-    const startEditorWithImageRecognition = () => startEditor(ProjectType.IMAGE_RECOGNITION)
+    const startEditorWithRegionAnnotation = () => startEditor(ProjectType.OBJECT_DETECTION);
 
     return(
         <div className='ImagesDropZone'>
@@ -87,18 +86,18 @@ const ImagesDropZone: React.FC<IProps> = (props: PropsWithChildren<IProps>) => {
             </div>
             <div className='DropZoneButtons'>
                 <TextButton
-                    label={'Object Detection'}
+                    label={'Start Region Annotation'}
                     isDisabled={!acceptedFiles.length}
-                    onClick={startEditorWithObjectDetection}
+                    onClick={startEditorWithRegionAnnotation}
                 />
                 <TextButton
-                    label={'Image recognition'}
-                    isDisabled={!acceptedFiles.length}
-                    onClick={startEditorWithImageRecognition}
+                    label={'Concept Annotation Coming Soon'}
+                    isDisabled={true}
+                    onClick={() => null}
                 />
             </div>
         </div>
-    )
+    );
 };
 
 const mapDispatchToProps = {

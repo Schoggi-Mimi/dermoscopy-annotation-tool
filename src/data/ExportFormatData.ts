@@ -39,6 +39,10 @@ export const ExportFormatData: ExportFormatDataMap = {
         {
             type: AnnotationFormatType.COCO,
             label: 'Single file in COCO JSON format.'
+        },
+        {
+            type: AnnotationFormatType.PNG_MASK,
+            label: 'Export PNG Masks + CSV Summary as ZIP: one binary mask per annotation.'
         }
     ],
     [LabelType.IMAGE_RECOGNITION]: [

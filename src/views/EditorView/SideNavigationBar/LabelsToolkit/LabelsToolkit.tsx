@@ -55,9 +55,6 @@ class LabelsToolkit extends React.Component<IProps, IState> {
                 LabelType.LINE,
                 LabelType.POLYGON
             ];
-
-        const activeTab: LabelType = props.activeLabelType ? props.activeLabelType : this.tabs[0];
-        props.updateActiveLabelType(activeTab);
     }
 
     public componentDidMount(): void {
@@ -91,9 +88,15 @@ class LabelsToolkit extends React.Component<IProps, IState> {
         const {size} = this.state;
         const {activeImageIndex, imagesData, activeLabelType} = this.props;
         return this.tabs.reduce((children, labelType: LabelType, index: number) => {
+            const shouldHideTool: boolean =
+                this.props.projectType !== ProjectType.IMAGE_RECOGNITION &&
+                labelType !== LabelType.POLYGON;
+
+            if (shouldHideTool) return children;
+
             const isActive: boolean = labelType === activeLabelType;
             const tabData: ILabelToolkit = find(LabelToolkitData, {labelType});
-            const activeTabContentHeight: number = size.height - this.tabs.length * Settings.TOOLKIT_TAB_HEIGHT_PX;
+            const activeTabContentHeight: number = size.height - Settings.TOOLKIT_TAB_HEIGHT_PX;
             const getClassName = (baseClass: string) => classNames(
                 baseClass,
                 {

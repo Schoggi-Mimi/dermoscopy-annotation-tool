@@ -6,8 +6,6 @@ import {AppState} from '../../../store';
 import {connect} from 'react-redux';
 import {updateActivePopupType, updateProjectData} from '../../../store/general/actionCreators';
 import TextInput from '../../Common/TextInput/TextInput';
-import {ImageButton} from '../../Common/ImageButton/ImageButton';
-import {Settings} from '../../../settings/Settings';
 import {ProjectData} from '../../../store/general/types';
 import DropDownMenu from './DropDownMenu/DropDownMenu';
 
@@ -46,10 +44,10 @@ const TopNavigationBar: React.FC<IProps> = (props) => {
                     >
                         <img
                             draggable={false}
-                            alt={'make-sense'}
-                            src={'/make-sense-ico-transparent.png'}
+                            alt={'MIA logo'}
+                            src={'/MIA.png'}
                         />
-                        Make Sense
+                        Dermoscopy Annotation Tool
                     </div>
                 </div>
                 <div className='NavigationBarGroupWrapper'>
@@ -62,14 +60,6 @@ const TopNavigationBar: React.FC<IProps> = (props) => {
                         value={props.projectData.name}
                         onChange={onChange}
                         onFocus={onFocus}
-                    />
-                </div>
-                <div className='NavigationBarGroupWrapper'>
-                    <ImageButton
-                        image={'ico/github-logo.png'}
-                        imageAlt={'github-logo.png'}
-                        buttonSize={{width: 30, height: 30}}
-                        href={Settings.GITHUB_URL}
                     />
                 </div>
             </div>

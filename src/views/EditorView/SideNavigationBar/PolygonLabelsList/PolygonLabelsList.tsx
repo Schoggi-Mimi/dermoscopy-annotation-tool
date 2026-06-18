@@ -106,8 +106,8 @@ const PolygonLabelsList: React.FC<IProps> = (
         >
             {imageData.labelPolygons.length === 0 ?
                 <EmptyLabelList
-                    labelBefore={'draw your first polygon'}
-                    labelAfter={'no labels created for this image yet'}
+                    labelBefore={'draw your first annotation'}
+                    labelAfter={'no polygon annotations created for this image yet'}
                 /> :
                 <Scrollbars>
                     <div
