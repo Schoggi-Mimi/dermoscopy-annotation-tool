@@ -1,21 +1,31 @@
 # Dermoscopy Annotation Tool
 
-A simplified local annotation tool for dermoscopy images. This fork is based on the open-source [make-sense](https://github.com/SkalskiP/make-sense) project and was adapted for a master's thesis workflow.
+A simplified web-based annotation tool for dermoscopy images. This fork is based on the open-source [make-sense](https://github.com/SkalskiP/make-sense) project and was adapted for a master's thesis workflow.
 
-The tool is intended for region-based annotation of melanoma images by a clinical expert. It runs locally in the browser and does not upload images to a server.
+The tool is intended for region-based annotation of melanoma images by a clinical expert. It runs entirely in the browser and does not upload images to an external server.
+
+## Live Application
+
+The production version of the tool is publicly hosted and can be accessed at:
+👉 **[https://Schoggi-Mimi.github.io/dermoscopy-annotation-tool](https://Schoggi-Mimi.github.io/dermoscopy-annotation-tool)**
+
+---
 
 ## Main features
 
-- Local browser-based image annotation
-- Polygon annotation selected automatically after image loading
-- Predefined dermoscopy annotation labels
-- Editable label names and colors
-- Export of one binary mask per polygon annotation
-- Export of a CSV summary linking image IDs, annotation IDs, labels, and mask filenames
+- **Zero Installation Hosting:** Accessible via a permanent public link.
+- **Local Browser-Based Processing:** Images never leave the clinician's machine.
+- **Auto-Polygon Tool:** Polygon annotation is selected automatically after image loading.
+- **Predefined Dermoscopy Labels:** Built-in labels mapped out for clinical workflows.
+- **Customizable:** Editable label names and colors.
+- **Mask Export:** Export of one binary mask per polygon annotation.
+- **Data Export:** Export of a CSV summary linking image IDs, annotation IDs, labels, and mask filenames.
+
+---
 
 ## Default labels
 
-The tool starts with the following labels:
+The tool initializes with the following diagnostic labels:
 
 - `diagnostic_region`
 - `suspicious_pigment`
@@ -24,71 +34,24 @@ The tool starts with the following labels:
 - `structure_pattern_region`
 - `artifact_ignore`
 
-These labels can be edited in the app under **Actions → Edit Labels**.
+These labels can be edited directly inside the application under **Actions → Edit Labels**.
+
+---
 
 ## Export format
 
-The export creates a ZIP file containing:
+The export routine generates a `.zip` file containing:˚
 
 - `annotation_summary.csv`
-- one binary PNG mask per polygon annotation
+- One binary `.png` mask per individual polygon annotation.
 
-Each mask has the original image size:
+Each generated mask maintains the exact dimensions of the original image:
+- **Background:** Black pixels (value `0`)
+- **Annotated Region:** White pixels (value `255`)
 
-- background = black, value `0`
-- annotated region = white, value `255`
-
-Example CSV structure:
+### Example CSV structure:
 
 ```csv
 Image_ID,Annotation_ID,Label_Name,Mask_Filename
 ISIC_0024306,annotation_001,diagnostic_region,ISIC_0024306_annotation_001.png
 ISIC_0024306,annotation_002,irregular_border,ISIC_0024306_annotation_002.png
-```
-
-## Local setup
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Start the local development server:
-
-```bash
-npm start
-```
-
-Open the app at:
-
-```text
-http://localhost:3000
-```
-
-Build the app:
-
-```bash
-npm run build
-```
-
-## Basic workflow
-
-1. Start the app locally.
-2. Upload dermoscopy images.
-3. Click **Start Region Annotation**.
-4. Draw polygon annotations on the lesion/image regions.
-5. Select or edit labels if needed.
-6. Export annotations as binary masks and CSV summary.
-
-## Privacy
-
-Images are processed locally in the browser. They are not uploaded to a server by this tool.
-
-## Acknowledgement
-
-This project is a thesis-specific adaptation of [make-sense](https://github.com/SkalskiP/make-sense), originally created by Piotr Skalski.
-
-## License
-
-This project follows the license of the original make-sense project. See the `LICENSE` file for details.
