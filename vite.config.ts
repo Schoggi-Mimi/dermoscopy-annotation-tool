@@ -10,7 +10,7 @@ import react from '@vitejs/plugin-react';
 export default ({ mode }: UserConfig): UserConfigExport => {
   process.env = { ...process.env, ...loadEnv(mode || 'development', process.cwd()) };
   return defineConfig({
-    base: '/<your-repo-name>/', // 👈 ADDED THIS LINE FOR GITHUB PAGES
+    base: '/dermoscopy-annotation-tool/',
     plugins: [react()],
     build: {
       minify: 'terser',
