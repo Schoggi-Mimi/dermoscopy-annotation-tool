@@ -16,7 +16,8 @@ const initialState: GeneralState = {
         type: null,
         name: 'derm-annotation',
     },
-    zoom: ViewPointSettings.MIN_ZOOM
+    zoom: ViewPointSettings.MIN_ZOOM,
+    brushRadiusImagePx: 18,
 };
 
 export function generalReducer(
@@ -82,6 +83,12 @@ export function generalReducer(
             return {
                 ...state,
                 enablePerClassColoration: action.payload.enablePerClassColoration
+            }
+        }
+        case Action.UPDATE_BRUSH_RADIUS_IMAGE_PX: {
+            return {
+                ...state,
+                brushRadiusImagePx: action.payload.brushRadiusImagePx
             }
         }
         default:

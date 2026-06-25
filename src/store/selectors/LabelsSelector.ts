@@ -1,5 +1,5 @@
 import {store} from '../..';
-import {ImageData, LabelLine, LabelName, LabelPoint, LabelPolygon, LabelRect} from '../labels/types';
+import {ImageData, LabelBrush, LabelLine, LabelName, LabelPoint, LabelPolygon, LabelRect} from '../labels/types';
 import {find} from 'lodash';
 import {LabelType} from '../../data/enums/LabelType';
 
@@ -83,6 +83,16 @@ export class LabelsSelector {
         return find(LabelsSelector.getActiveImageData().labelPolygons, {id: activeLabelId});
     }
 
+    public static getActiveBrushLabel(): LabelBrush | null {
+        const activeLabelId: string | null = LabelsSelector.getActiveLabelId()
+
+        if (activeLabelId === null) {
+            return null
+        }
+
+        return find(LabelsSelector.getActiveImageData().labelBrushes, {id: activeLabelId})
+    }
+    
     public static getActiveLineLabel(): LabelLine | null {
         const activeLabelId: string | null = LabelsSelector.getActiveLabelId();
 

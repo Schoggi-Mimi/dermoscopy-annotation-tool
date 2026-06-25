@@ -1,27 +1,28 @@
-import React from "react";
-import './LabelsToolkit.scss';
-import {ImageData} from "../../../../store/labels/types";
-import {updateActiveLabelId, updateActiveLabelType, updateImageDataById} from "../../../../store/labels/actionCreators";
-import {AppState} from "../../../../store";
-import {connect} from "react-redux";
-import {LabelType} from "../../../../data/enums/LabelType";
-import {ProjectType} from "../../../../data/enums/ProjectType";
-import {ISize} from "../../../../interfaces/ISize";
 import classNames from "classnames";
-import {find} from "lodash";
-import {ILabelToolkit, LabelToolkitData} from "../../../../data/info/LabelToolkitData";
-import {Settings} from "../../../../settings/Settings";
-import RectLabelsList from "../RectLabelsList/RectLabelsList";
+import { find } from "lodash";
+import React from "react";
+import { connect } from "react-redux";
+import { ContextType } from "../../../../data/enums/ContextType";
+import { EventType } from "../../../../data/enums/EventType";
+import { LabelType } from "../../../../data/enums/LabelType";
+import { ProjectType } from "../../../../data/enums/ProjectType";
+import { ILabelToolkit, LabelToolkitData } from "../../../../data/info/LabelToolkitData";
+import { ISize } from "../../../../interfaces/ISize";
+import { ContextManager } from "../../../../logic/context/ContextManager";
+import { Settings } from "../../../../settings/Settings";
+import { AppState } from "../../../../store";
+import { updateActiveLabelId, updateActiveLabelType, updateImageDataById } from "../../../../store/labels/actionCreators";
+import { ImageData } from "../../../../store/labels/types";
+import BrushLabelsList from "../BrushLabelsList/BrushLabelsList";
+import LineLabelsList from "../LineLabelsList/LineLabelsList";
 import PointLabelsList from "../PointLabelsList/PointLabelsList";
 import PolygonLabelsList from "../PolygonLabelsList/PolygonLabelsList";
-import {ContextManager} from "../../../../logic/context/ContextManager";
-import {ContextType} from "../../../../data/enums/ContextType";
-import {EventType} from "../../../../data/enums/EventType";
-import LineLabelsList from "../LineLabelsList/LineLabelsList";
+import RectLabelsList from "../RectLabelsList/RectLabelsList";
 import TagLabelsList from "../TagLabelsList/TagLabelsList";
+import './LabelsToolkit.scss';
 
 interface IProps {
-    activeImageIndex:number,
+    activeImageIndex: number,
     activeLabelType: LabelType;
     imagesData: ImageData[];
     projectType: ProjectType;
@@ -50,10 +51,11 @@ class LabelsToolkit extends React.Component<IProps, IState> {
                 LabelType.IMAGE_RECOGNITION
             ] :
             [
+                LabelType.BRUSH,
+                LabelType.POLYGON,
                 LabelType.RECT,
                 LabelType.POINT,
-                LabelType.LINE,
-                LabelType.POLYGON
+                LabelType.LINE
             ];
     }
 
@@ -85,17 +87,22 @@ class LabelsToolkit extends React.Component<IProps, IState> {
     };
 
     private renderChildren = () => {
-        const {size} = this.state;
-        const {activeImageIndex, imagesData, activeLabelType} = this.props;
+        const { size } = this.state;
+        const { activeImageIndex, imagesData, activeLabelType } = this.props;
         return this.tabs.reduce((children, labelType: LabelType, index: number) => {
+            const visibleObjectDetectionTools: LabelType[] = [
+                LabelType.BRUSH,
+                LabelType.POLYGON
+            ]
+
             const shouldHideTool: boolean =
                 this.props.projectType !== ProjectType.IMAGE_RECOGNITION &&
-                labelType !== LabelType.POLYGON;
+                !visibleObjectDetectionTools.includes(labelType)
 
             if (shouldHideTool) return children;
 
             const isActive: boolean = labelType === activeLabelType;
-            const tabData: ILabelToolkit = find(LabelToolkitData, {labelType});
+            const tabData: ILabelToolkit = find(LabelToolkitData, { labelType });
             const activeTabContentHeight: number = size.height - Settings.TOOLKIT_TAB_HEIGHT_PX;
             const getClassName = (baseClass: string) => classNames(
                 baseClass,
@@ -109,9 +116,9 @@ class LabelsToolkit extends React.Component<IProps, IState> {
                     key={"Header_" + index}
                     className={getClassName("Header")}
                     onClick={() => this.headerClickHandler(labelType)}
-                    style={{height: Settings.TOOLKIT_TAB_HEIGHT_PX}}
+                    style={{ height: Settings.TOOLKIT_TAB_HEIGHT_PX }}
                 >
-                    <div className="Marker"/>
+                    <div className="Marker" />
                     <div className="HeaderGroupWrapper">
                         <img
                             draggable={false}
@@ -135,7 +142,7 @@ class LabelsToolkit extends React.Component<IProps, IState> {
                 <div
                     key={"Content_" + index}
                     className={getClassName("Content")}
-                    style={{height: isActive ? activeTabContentHeight : 0}}
+                    style={{ height: isActive ? activeTabContentHeight : 0 }}
                 >
                     {labelType === LabelType.RECT && <RectLabelsList
                         size={{
@@ -165,6 +172,13 @@ class LabelsToolkit extends React.Component<IProps, IState> {
                         }}
                         imageData={imagesData[activeImageIndex]}
                     />}
+                    {labelType === LabelType.BRUSH && <BrushLabelsList
+                        size={{
+                            width: size.width - 20,
+                            height: activeTabContentHeight - 20
+                        }}
+                        imageData={imagesData[activeImageIndex]}
+                    />}
                     {labelType === LabelType.IMAGE_RECOGNITION && <TagLabelsList
                         size={{
                             width: size.width - 20,
@@ -180,7 +194,7 @@ class LabelsToolkit extends React.Component<IProps, IState> {
     };
 
     public render() {
-        return(
+        return (
             <div
                 className="LabelsToolkit"
                 ref={ref => this.labelsToolkitRef = ref}

@@ -1,58 +1,24 @@
-import {ILabelFormatData} from '../interfaces/ILabelFormatData';
-import {LabelType} from './enums/LabelType';
-import {AnnotationFormatType} from './enums/AnnotationFormatType';
+import {ILabelFormatData} from '../interfaces/ILabelFormatData'
+import {LabelType} from './enums/LabelType'
+import {AnnotationFormatType} from './enums/AnnotationFormatType'
 
-export type ExportFormatDataMap = Record<LabelType, ILabelFormatData[]>;
+export type ExportFormatDataMap = Record<LabelType, ILabelFormatData[]>
 
 export const ExportFormatData: ExportFormatDataMap = {
-    [LabelType.RECT]: [
-        {
-            type: AnnotationFormatType.YOLO,
-            label: 'A .zip package containing files in YOLO format.'
-        },
-        {
-            type: AnnotationFormatType.VOC,
-            label: 'A .zip package containing files in VOC XML format.'
-        },
-        {
-            type: AnnotationFormatType.CSV,
-            label: 'Single CSV file.'
-        }
-    ],
-    [LabelType.POINT]: [
-        {
-            type: AnnotationFormatType.CSV,
-            label: 'Single CSV file.'
-        }
-    ],
-    [LabelType.LINE]: [
-        {
-            type: AnnotationFormatType.CSV,
-            label: 'Single CSV file.'
-        }
-    ],
+    [LabelType.RECT]: [],
+    [LabelType.POINT]: [],
+    [LabelType.LINE]: [],
     [LabelType.POLYGON]: [
         {
-            type: AnnotationFormatType.VGG,
-            label: 'Single file in VGG JSON format.'
-        },
-        {
-            type: AnnotationFormatType.COCO,
-            label: 'Single file in COCO JSON format.'
-        },
-        {
             type: AnnotationFormatType.PNG_MASK,
-            label: 'Export PNG Masks + CSV Summary as ZIP: one binary mask per annotation.'
+            label: 'Export PNG Masks + CSV Summary as ZIP.'
         }
     ],
-    [LabelType.IMAGE_RECOGNITION]: [
+    [LabelType.IMAGE_RECOGNITION]: [],
+    [LabelType.BRUSH]: [
         {
-            type: AnnotationFormatType.CSV,
-            label: 'Single CSV file.'
-        },
-        {
-            type: AnnotationFormatType.JSON,
-            label: 'Single JSON file.'
+            type: AnnotationFormatType.PNG_MASK,
+            label: 'Export PNG Masks + CSV Summary as ZIP.'
         }
     ]
 }

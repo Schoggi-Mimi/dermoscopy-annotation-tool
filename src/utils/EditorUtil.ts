@@ -1,39 +1,43 @@
-import {CustomCursorStyle} from "../data/enums/CustomCursorStyle";
-import classNames from "classnames";
+import {CustomCursorStyle} from "../data/enums/CustomCursorStyle"
+import classNames from "classnames"
 
 export class EditorUtil {
     public static getIndicator = (cursorStyle: CustomCursorStyle): string => {
         switch (cursorStyle) {
             case CustomCursorStyle.ADD:
-                return "ico/plus.png";
+                return "ico/plus.png"
             case CustomCursorStyle.RESIZE:
-                return "ico/resize.png";
+                return "ico/resize.png"
             case CustomCursorStyle.CLOSE:
-                return "ico/close.png";
+                return "ico/close.png"
             case CustomCursorStyle.MOVE:
-                return "ico/move.png";
+                return "ico/move.png"
             case CustomCursorStyle.CANCEL:
-                return "ico/cancel.png";
+                return "ico/cancel.png"
             case CustomCursorStyle.GRAB:
-                return "ico/hand-fill.png";
+                return "ico/hand-fill.png"
             case CustomCursorStyle.GRABBING:
-                return "ico/hand-fill-grab.png";
+                return "ico/hand-fill-grab.png"
+            case CustomCursorStyle.BRUSH:
+                return null
             default:
-                return null;
+                return null
         }
-    };
+    }
 
     public static getCursorStyle = (cursorStyle: CustomCursorStyle) => {
         return classNames(
-            "Cursor", {
+            "Cursor",
+            {
                 "move": cursorStyle === CustomCursorStyle.MOVE,
                 "add": cursorStyle === CustomCursorStyle.ADD,
                 "resize": cursorStyle === CustomCursorStyle.RESIZE,
                 "close": cursorStyle === CustomCursorStyle.CLOSE,
                 "cancel": cursorStyle === CustomCursorStyle.CANCEL,
                 "grab": cursorStyle === CustomCursorStyle.GRAB,
-                "grabbing": cursorStyle === CustomCursorStyle.GRABBING
+                "grabbing": cursorStyle === CustomCursorStyle.GRABBING,
+                "brush": cursorStyle === CustomCursorStyle.BRUSH
             }
-        );
-    };
+        )
+    }
 }

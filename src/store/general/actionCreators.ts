@@ -94,3 +94,12 @@ export function updatePerClassColorationStatus(enablePerClassColoration: boolean
         },
     };
 }
+
+export function updateBrushRadiusImagePx(brushRadiusImagePx: number): GeneralActionTypes {
+    return {
+        type: Action.UPDATE_BRUSH_RADIUS_IMAGE_PX,
+        payload: {
+            brushRadiusImagePx
+        }
+    }
+}

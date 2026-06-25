@@ -1,19 +1,19 @@
-import * as React from 'react';
-import './TextButton.scss';
-import classNames from 'classnames';
+import * as React from 'react'
+import './TextButton.scss'
+import classNames from 'classnames'
 
 interface IProps {
-    key?:string;
-    label:string;
-    onClick?:() => any;
-    style?:React.CSSProperties;
-    isActive?:boolean;
-    isDisabled?:boolean;
-    externalClassName?:string;
+    key?: string
+    label: string
+    onClick?: () => any
+    style?: React.CSSProperties
+    isActive?: boolean
+    isDisabled?: boolean
+    externalClassName?: string
 }
 
-export const TextButton = (props:IProps) => {
-    const { key, label, onClick, style, isActive, isDisabled, externalClassName} = props;
+export const TextButton = (props: IProps) => {
+    const {key, label, onClick, style, isActive, isDisabled, externalClassName} = props
 
     const getClassName = () => {
         return classNames(
@@ -23,15 +23,22 @@ export const TextButton = (props:IProps) => {
                 'active': isActive,
                 'disabled': isDisabled
             }
-        );
-    };
+        )
+    }
 
-    const onClickHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        event.stopPropagation();
-        if (onClick) {
-            onClick();
+    const onClickHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.stopPropagation()
+
+        console.error('TEXT_BUTTON_CLICKED', label, 'disabled:', isDisabled)
+
+        if (isDisabled) {
+            return
         }
-    };
+
+        if (onClick) {
+            onClick()
+        }
+    }
 
     return(
         <div
@@ -43,4 +50,4 @@ export const TextButton = (props:IProps) => {
             {label}
         </div>
     )
-};
+}

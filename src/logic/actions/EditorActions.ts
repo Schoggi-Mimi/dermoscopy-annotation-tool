@@ -20,6 +20,7 @@ import {GeneralSelector} from "../../store/selectors/GeneralSelector";
 import {ViewPortHelper} from "../helpers/ViewPortHelper";
 import {CustomCursorStyle} from "../../data/enums/CustomCursorStyle";
 import {LineRenderEngine} from "../render/LineRenderEngine";
+import {BrushRenderEngine} from "../render/BrushRenderEngine";
 
 export class EditorActions {
 
@@ -30,20 +31,23 @@ export class EditorActions {
     public static mountSupportRenderingEngine(activeLabelType: LabelType) {
         switch (activeLabelType) {
             case LabelType.RECT:
-                EditorModel.supportRenderingEngine = new RectRenderEngine(EditorModel.canvas);
-                break;
+                EditorModel.supportRenderingEngine = new RectRenderEngine(EditorModel.canvas)
+                break
             case LabelType.POINT:
-                EditorModel.supportRenderingEngine = new PointRenderEngine(EditorModel.canvas);
-                break;
+                EditorModel.supportRenderingEngine = new PointRenderEngine(EditorModel.canvas)
+                break
             case LabelType.LINE:
-                EditorModel.supportRenderingEngine = new LineRenderEngine(EditorModel.canvas);
-                break;
+                EditorModel.supportRenderingEngine = new LineRenderEngine(EditorModel.canvas)
+                break
             case LabelType.POLYGON:
-                EditorModel.supportRenderingEngine = new PolygonRenderEngine(EditorModel.canvas);
-                break;
+                EditorModel.supportRenderingEngine = new PolygonRenderEngine(EditorModel.canvas)
+                break
+            case LabelType.BRUSH:
+                EditorModel.supportRenderingEngine = new BrushRenderEngine(EditorModel.canvas)
+                break
             default:
-                EditorModel.supportRenderingEngine = null;
-                break;
+                EditorModel.supportRenderingEngine = null
+                break
         }
     };
 
@@ -124,7 +128,24 @@ export class EditorActions {
             EditorModel.cursor.style.top = mousePositionOverViewPort.y + "px";
             EditorModel.cursor.style.display = "block";
 
-            if (isMouseOverImage && ![CustomCursorStyle.GRAB, CustomCursorStyle.GRABBING].includes(GeneralSelector.getCustomCursorStyle())) {
+            const customCursorStyle = GeneralSelector.getCustomCursorStyle()
+
+            if (customCursorStyle === CustomCursorStyle.BRUSH && isMouseOverImage) {
+                const imageSize: ISize = ImageUtil.getSize(EditorModel.image)
+                const scale: number = imageSize.width / viewPortContentImageRect.width
+                const brushDiameterOnViewPort = Math.max(
+                    6,
+                    GeneralSelector.getBrushRadiusImagePx() * 2 / scale
+                )
+
+                EditorModel.cursor.style.width = brushDiameterOnViewPort + "px"
+                EditorModel.cursor.style.height = brushDiameterOnViewPort + "px"
+            } else {
+                EditorModel.cursor.style.width = null
+                EditorModel.cursor.style.height = null
+            }
+
+            if (isMouseOverImage && ![CustomCursorStyle.GRAB, CustomCursorStyle.GRABBING].includes(customCursorStyle)) {
                 const imageSize: ISize = ImageUtil.getSize(EditorModel.image);
                 const scale: number = imageSize.width / viewPortContentImageRect.width;
                 const mousePositionOverImage: IPoint = PointUtil.multiply(

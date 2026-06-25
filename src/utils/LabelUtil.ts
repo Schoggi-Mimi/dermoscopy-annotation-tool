@@ -1,4 +1,4 @@
-import {Annotation, LabelName, LabelPoint, LabelPolygon, LabelRect} from '../store/labels/types';
+import {Annotation, LabelBrush, LabelBrushStroke, LabelName, LabelPoint, LabelPolygon, LabelRect} from '../store/labels/types';
 import { v4 as uuidv4 } from 'uuid';
 import {find} from 'lodash';
 import {IRect} from '../interfaces/IRect';
@@ -37,6 +37,15 @@ export class LabelUtil {
         }
     }
 
+    public static createLabelBrush(labelId: string, stroke: LabelBrushStroke): LabelBrush {
+        return {
+            id: uuidv4(),
+            labelId,
+            strokes: [stroke],
+            isVisible: true
+        }
+    }
+    
     public static createLabelPoint(labelId: string, point: IPoint): LabelPoint {
         return {
             id: uuidv4(),

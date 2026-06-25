@@ -44,4 +44,8 @@ export class GeneralSelector {
     public static getEnablePerClassColorationStatus(): boolean {
         return store.getState().general.enablePerClassColoration
     }
+
+    public static getBrushRadiusImagePx(): number {
+        return store.getState().general.brushRadiusImagePx
+    }
 }

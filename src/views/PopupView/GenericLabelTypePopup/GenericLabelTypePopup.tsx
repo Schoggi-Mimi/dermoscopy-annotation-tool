@@ -1,25 +1,26 @@
 import React, {useState} from 'react'
 import './GenericLabelTypePopup.scss'
-import {LabelType} from '../../../data/enums/LabelType';
-import {AppState} from '../../../store';
-import {connect} from 'react-redux';
-import {ImageButton} from '../../Common/ImageButton/ImageButton';
-import {GenericYesNoPopup} from '../GenericYesNoPopup/GenericYesNoPopup';
-import {ILabelToolkit, LabelToolkitData} from '../../../data/info/LabelToolkitData';
-import {ProjectType} from '../../../data/enums/ProjectType';
+import {LabelType} from '../../../data/enums/LabelType'
+import {AppState} from '../../../store'
+import {connect} from 'react-redux'
+import {ImageButton} from '../../Common/ImageButton/ImageButton'
+import {GenericYesNoPopup} from '../GenericYesNoPopup/GenericYesNoPopup'
+import {ILabelToolkit, LabelToolkitData} from '../../../data/info/LabelToolkitData'
+import {ProjectType} from '../../../data/enums/ProjectType'
 
 interface IProps {
-    title: string,
-    activeLabelType: LabelType,
-    projectType: ProjectType;
-    onLabelTypeChange?: (labelType: LabelType) => any;
-    acceptLabel: string;
-    onAccept: (labelType: LabelType) => any;
-    skipAcceptButton?: boolean;
-    disableAcceptButton?: boolean;
-    rejectLabel: string;
-    onReject: (labelType: LabelType) => any;
-    renderInternalContent: (labelType: LabelType) => any;
+    title: string
+    activeLabelType: LabelType
+    projectType: ProjectType
+    allowedLabelTypes?: LabelType[]
+    onLabelTypeChange?: (labelType: LabelType) => any
+    acceptLabel: string
+    onAccept: (labelType: LabelType) => any
+    skipAcceptButton?: boolean
+    disableAcceptButton?: boolean
+    rejectLabel: string
+    onReject: (labelType: LabelType) => any
+    renderInternalContent: (labelType: LabelType) => any
 }
 
 const GenericLabelTypePopup: React.FC<IProps> = (
@@ -27,6 +28,7 @@ const GenericLabelTypePopup: React.FC<IProps> = (
         title,
         activeLabelType,
         projectType,
+        allowedLabelTypes,
         onLabelTypeChange,
         acceptLabel,
         onAccept,
@@ -37,11 +39,27 @@ const GenericLabelTypePopup: React.FC<IProps> = (
         renderInternalContent
     }) => {
 
-    const [labelType, setLabelType] = useState(activeLabelType);
+    const [labelType, setLabelType] = useState(activeLabelType)
+
+    const getSidebarLabels = (): ILabelToolkit[] => {
+        const labels = LabelToolkitData.filter((label: ILabelToolkit) => {
+            const isCorrectProject = label.projectType === projectType
+            const isAllowed = !allowedLabelTypes || allowedLabelTypes.includes(label.labelType)
+
+            return isCorrectProject && isAllowed
+        })
+
+        if (!allowedLabelTypes) {
+            return labels
+        }
+
+        return allowedLabelTypes
+            .map((allowedLabelType: LabelType) => labels.find((label: ILabelToolkit) => label.labelType === allowedLabelType))
+            .filter((label: ILabelToolkit | undefined) => !!label) as ILabelToolkit[]
+    }
 
     const getSidebarButtons = () => {
-        return LabelToolkitData
-            .filter((label: ILabelToolkit) => label.projectType === projectType)
+        return getSidebarLabels()
             .map((label: ILabelToolkit) => {
                 return <ImageButton
                     key={label.labelType}
@@ -50,8 +68,8 @@ const GenericLabelTypePopup: React.FC<IProps> = (
                     buttonSize={{width: 40, height: 40}}
                     padding={20}
                     onClick={() => {
-                        setLabelType(label.labelType);
-                        onLabelTypeChange(label.labelType);
+                        setLabelType(label.labelType)
+                        onLabelTypeChange && onLabelTypeChange(label.labelType)
                     }}
                     isActive={labelType === label.labelType}
                 />
@@ -59,14 +77,16 @@ const GenericLabelTypePopup: React.FC<IProps> = (
     }
 
     const renderContent = () => {
-        return (<div className='GenericLabelTypePopupContent'>
-            <div className='LeftContainer'>
-                {getSidebarButtons()}
+        return (
+            <div className='GenericLabelTypePopupContent'>
+                <div className='LeftContainer'>
+                    {getSidebarButtons()}
+                </div>
+                <div className='RightContainer'>
+                    {renderInternalContent(labelType)}
+                </div>
             </div>
-            <div className='RightContainer'>
-                {renderInternalContent(labelType)}
-            </div>
-        </div>);
+        )
     }
 
     return(
@@ -80,16 +100,16 @@ const GenericLabelTypePopup: React.FC<IProps> = (
             rejectLabel={rejectLabel}
             onReject={() => onReject(labelType)}
         />
-    );
-};
+    )
+}
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {}
 
 const mapStateToProps = (state: AppState) => ({
     projectType: state.general.projectData.type
-});
+})
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(GenericLabelTypePopup);
+)(GenericLabelTypePopup)

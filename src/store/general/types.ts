@@ -21,6 +21,14 @@ export type GeneralState = {
     activeContext: ContextType;
     projectData: ProjectData;
     zoom: number;
+    brushRadiusImagePx: number;
+}
+
+interface UpdateBrushRadiusImagePx {
+    type: typeof Action.UPDATE_BRUSH_RADIUS_IMAGE_PX
+    payload: {
+        brushRadiusImagePx: number
+    }
 }
 
 interface UpdateProjectData {
@@ -103,3 +111,4 @@ export type GeneralActionTypes = UpdateProjectData
     | UpdateCrossHairVisibleStatus
     | UpdateZoom
     | UpdatePerClassColoration
+    | UpdateBrushRadiusImagePx

@@ -118,7 +118,7 @@ class Editor extends React.Component<IProps, IState> {
             EditorActions.setActiveImage(ImageRepository.getById(imageData.id));
             AIActions.detect(imageData.id, ImageRepository.getById(imageData.id));
             this.updateModelAndRender();
-            this.activatePolygonToolAfterImageReady();
+            this.activateBrushToolAfterImageReady();
         }
         else {
             if (!EditorModel.isLoading) {
@@ -139,7 +139,7 @@ class Editor extends React.Component<IProps, IState> {
         AIActions.detect(imageData.id, image);
         EditorActions.setLoadingStatus(false);
         this.updateModelAndRender();
-        this.activatePolygonToolAfterImageReady();
+        this.activateBrushToolAfterImageReady();
     };
 
     private handleLoadImageError = () => {};
@@ -226,13 +226,13 @@ class Editor extends React.Component<IProps, IState> {
         }
     };
 
-    private activatePolygonToolAfterImageReady = () => {
+    private activateBrushToolAfterImageReady = () => {
         window.setTimeout(() => {
-            this.props.updateActiveLabelType(LabelType.POLYGON);
-            this.props.updateActiveLabelId(null);
-            EditorActions.swapSupportRenderingEngine(LabelType.POLYGON);
-            EditorActions.fullRender();
-        }, 600);
+            this.props.updateActiveLabelType(LabelType.BRUSH)
+            this.props.updateActiveLabelId(null)
+            EditorActions.swapSupportRenderingEngine(LabelType.BRUSH)
+            EditorActions.fullRender()
+        }, 600)
     };
 
     public render() {

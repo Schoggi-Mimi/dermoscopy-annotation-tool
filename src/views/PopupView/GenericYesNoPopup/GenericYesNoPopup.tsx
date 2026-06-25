@@ -56,7 +56,12 @@ export const GenericYesNoPopup: React.FC<IProps> = (
                 />}
                 {!skipAcceptButton && <TextButton
                     label={acceptLabel ? acceptLabel : 'YES'}
-                    onClick={onAccept}
+                    onClick={() => {
+                        console.error('GENERIC_POPUP_ACCEPT_CLICKED')
+                        if (onAccept) {
+                            onAccept()
+                        }
+                    }}
                     externalClassName={'accept'}
                     isDisabled={disableAcceptButton}
                 />}

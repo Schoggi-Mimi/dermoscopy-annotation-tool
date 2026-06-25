@@ -1,12 +1,12 @@
-import {LabelType} from '../enums/LabelType';
-import {ProjectType} from '../enums/ProjectType';
+import {LabelType} from '../enums/LabelType'
+import {ProjectType} from '../enums/ProjectType'
 
 export interface ILabelToolkit {
-    labelType: LabelType;
-    headerText: string;
-    imageSrc: string;
-    imageAlt: string;
-    projectType: ProjectType;
+    labelType: LabelType
+    headerText: string
+    imageSrc: string
+    imageAlt: string
+    projectType: ProjectType
 }
 
 export const LabelToolkitData: ILabelToolkit[] = [
@@ -40,9 +40,16 @@ export const LabelToolkitData: ILabelToolkit[] = [
     },
     {
         labelType: LabelType.POLYGON,
-        headerText: 'Annotation',
+        headerText: 'Polygon',
         imageSrc: 'ico/polygon.png',
         imageAlt: 'polygon',
         projectType: ProjectType.OBJECT_DETECTION,
     },
-];
+    {
+        labelType: LabelType.BRUSH,
+        headerText: 'Brush',
+        imageSrc: 'ico/brush.png',
+        imageAlt: 'brush',
+        projectType: ProjectType.OBJECT_DETECTION,
+    },
+]
