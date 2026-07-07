@@ -48,8 +48,8 @@ const BrushLabelsList: React.FC<IProps> = (
     const labelInputFieldHeight = 40
     const activeSelectorHeight = 46
     const brushSizeControlHeight = 54
-    const brushRadiusMin = 5
-    const brushRadiusMax = 80
+    const brushRadiusMin = 1
+    const brushRadiusMax = 30
     const labelBrushes = imageData.labelBrushes || []
 
     const activeLabelName = findLast(labelNames, {id: activeLabelNameId})

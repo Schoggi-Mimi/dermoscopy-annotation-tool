@@ -1,26 +1,26 @@
-import {LabelType} from "../../data/enums/LabelType";
-import {EditorModel} from "../../staticModels/EditorModel";
-import {RectRenderEngine} from "../render/RectRenderEngine";
-import {PointRenderEngine} from "../render/PointRenderEngine";
-import {PolygonRenderEngine} from "../render/PolygonRenderEngine";
-import {IRect} from "../../interfaces/IRect";
-import {RectUtil} from "../../utils/RectUtil";
-import {EditorData} from "../../data/EditorData";
-import {CanvasUtil} from "../../utils/CanvasUtil";
 import React from "react";
-import {IPoint} from "../../interfaces/IPoint";
-import {DrawUtil} from "../../utils/DrawUtil";
-import {PrimaryEditorRenderEngine} from "../render/PrimaryEditorRenderEngine";
-import {ContextManager} from "../context/ContextManager";
-import {PointUtil} from "../../utils/PointUtil";
-import {ViewPortActions} from "./ViewPortActions";
-import {ISize} from "../../interfaces/ISize";
-import {ImageUtil} from "../../utils/ImageUtil";
-import {GeneralSelector} from "../../store/selectors/GeneralSelector";
-import {ViewPortHelper} from "../helpers/ViewPortHelper";
-import {CustomCursorStyle} from "../../data/enums/CustomCursorStyle";
-import {LineRenderEngine} from "../render/LineRenderEngine";
-import {BrushRenderEngine} from "../render/BrushRenderEngine";
+import { EditorData } from "../../data/EditorData";
+import { CustomCursorStyle } from "../../data/enums/CustomCursorStyle";
+import { LabelType } from "../../data/enums/LabelType";
+import { IPoint } from "../../interfaces/IPoint";
+import { IRect } from "../../interfaces/IRect";
+import { ISize } from "../../interfaces/ISize";
+import { EditorModel } from "../../staticModels/EditorModel";
+import { GeneralSelector } from "../../store/selectors/GeneralSelector";
+import { CanvasUtil } from "../../utils/CanvasUtil";
+import { DrawUtil } from "../../utils/DrawUtil";
+import { ImageUtil } from "../../utils/ImageUtil";
+import { PointUtil } from "../../utils/PointUtil";
+import { RectUtil } from "../../utils/RectUtil";
+import { ContextManager } from "../context/ContextManager";
+import { ViewPortHelper } from "../helpers/ViewPortHelper";
+import { BrushRenderEngine } from "../render/BrushRenderEngine";
+import { LineRenderEngine } from "../render/LineRenderEngine";
+import { PointRenderEngine } from "../render/PointRenderEngine";
+import { PolygonRenderEngine } from "../render/PolygonRenderEngine";
+import { PrimaryEditorRenderEngine } from "../render/PrimaryEditorRenderEngine";
+import { RectRenderEngine } from "../render/RectRenderEngine";
+import { ViewPortActions } from "./ViewPortActions";
 
 export class EditorActions {
 
@@ -109,7 +109,7 @@ export class EditorActions {
     // HELPERS
     // =================================================================================================================
 
-    public static updateMousePositionIndicator(event: React.MouseEvent<HTMLCanvasElement, MouseEvent> | MouseEvent) {
+    public static updateMousePositionIndicator(event: React.MouseEvent<HTMLCanvasElement, MouseEvent> | MouseEvent) {
         if (!EditorModel.image || !EditorModel.canvas) {
             EditorModel.mousePositionIndicator.style.display = "none";
             EditorModel.cursor.style.display = "none";
@@ -121,7 +121,7 @@ export class EditorActions {
         const viewPortContentImageRect: IRect = ViewPortActions.calculateViewPortContentImageRect();
         const mousePositionOverViewPort: IPoint = PointUtil.subtract(mousePositionOverViewPortContent, viewPortContentScrollPosition);
         const isMouseOverImage: boolean = RectUtil.isPointInside(viewPortContentImageRect, mousePositionOverViewPortContent);
-        const isMouseOverViewPort: boolean = RectUtil.isPointInside({x: 0, y: 0, ...EditorModel.viewPortSize}, mousePositionOverViewPort);
+        const isMouseOverViewPort: boolean = RectUtil.isPointInside({ x: 0, y: 0, ...EditorModel.viewPortSize }, mousePositionOverViewPort);
 
         if (isMouseOverViewPort && !GeneralSelector.getPreventCustomCursorStatus()) {
             EditorModel.cursor.style.left = mousePositionOverViewPort.x + "px";
@@ -134,7 +134,7 @@ export class EditorActions {
                 const imageSize: ISize = ImageUtil.getSize(EditorModel.image)
                 const scale: number = imageSize.width / viewPortContentImageRect.width
                 const brushDiameterOnViewPort = Math.max(
-                    6,
+                    2,
                     GeneralSelector.getBrushRadiusImagePx() * 2 / scale
                 )
 

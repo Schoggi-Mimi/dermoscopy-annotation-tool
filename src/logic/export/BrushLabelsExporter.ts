@@ -7,13 +7,12 @@ import { LabelsSelector } from '../../store/selectors/LabelsSelector'
 import { ExporterUtil } from '../../utils/ExporterUtil'
 
 export class BrushLabelsExporter {
+    private static readonly BINARY_THRESHOLD = 0
+
     public static async export(
         exportFormatType: AnnotationFormatType,
         downloadWindow?: Window | null
     ): Promise<void> {
-        console.error('BRUSH_EXPORT_ENTRY')
-        console.error('BRUSH_EXPORT_FORMAT', exportFormatType)
-
         if (exportFormatType !== AnnotationFormatType.PNG_MASK) {
             throw new Error(`Unsupported brush export format: ${exportFormatType}`)
         }
@@ -26,9 +25,6 @@ export class BrushLabelsExporter {
         const labelNames: LabelName[] = LabelsSelector.getLabelNames()
         const zip = new JSZip()
 
-        console.error('BRUSH_EXPORT_IMAGE_COUNT', imagesData.length)
-        console.error('BRUSH_EXPORT_IMAGES_RAW', imagesData)
-
         const rows: string[] = [
             'Image_ID,Annotation_ID,Label_ID,Label_Name,Mask_Filename,Stroke_Count'
         ]
@@ -40,32 +36,17 @@ export class BrushLabelsExporter {
                 BrushLabelsExporter.getValidBrushLabels(imageData)
             )
 
-            console.error('BRUSH_EXPORT_IMAGE_CHECK', {
-                id: imageData.id,
-                fileName: imageData.fileData ? imageData.fileData.name : null,
-                loadStatus: imageData.loadStatus,
-                labelBrushes: imageData.labelBrushes,
-                validBrushLabelsCount: validBrushLabels.length
-            })
-
             if (validBrushLabels.length === 0) {
                 continue
             }
 
             const imageSize = await BrushLabelsExporter.getImageSize(imageData)
 
-            console.error('BRUSH_EXPORT_IMAGE_SIZE', {
-                fileName: imageData.fileData.name,
-                width: imageSize.width,
-                height: imageSize.height
-            })
-
             for (let index = 0; index < validBrushLabels.length; index++) {
                 const labelBrush = validBrushLabels[index]
                 const labelName = findLast(labelNames, { id: labelBrush.labelId })
 
                 if (!labelName) {
-                    console.error('BRUSH_EXPORT_SKIP_NO_LABEL_NAME', labelBrush)
                     continue
                 }
 
@@ -95,8 +76,6 @@ export class BrushLabelsExporter {
 
         zip.file('brush_annotation_summary.csv', rows.join('\n'))
 
-        console.error('BRUSH_EXPORT_MASK_COUNT', exportedMaskCount)
-
         if (exportedMaskCount === 0) {
             zip.file(
                 'NO_BRUSH_MASKS_EXPORTED.txt',
@@ -106,18 +85,11 @@ export class BrushLabelsExporter {
 
         const zipBlob = await zip.generateAsync({ type: 'blob' })
 
-        console.error('BRUSH_EXPORT_ZIP_BLOB', {
-            size: zipBlob.size,
-            type: zipBlob.type
-        })
-
         ExporterUtil.saveBlob(
             zipBlob,
             'brush_annotation_masks.zip',
             downloadWindow
         )
-
-        console.error('BRUSH_EXPORT_SAVE_BLOB_CALLED')
     }
 
     private static getValidBrushLabels(imageData: ImageData): LabelBrush[] {
@@ -191,6 +163,8 @@ export class BrushLabelsExporter {
             BrushLabelsExporter.drawStroke(context, stroke)
         })
 
+        BrushLabelsExporter.forceBinaryCanvas(context, width, height)
+
         return new Promise((resolve, reject) => {
             canvas.toBlob((blob: Blob | null) => {
                 if (!blob) {
@@ -228,6 +202,31 @@ export class BrushLabelsExporter {
         }
 
         context.stroke()
+    }
+
+    private static forceBinaryCanvas(
+        context: CanvasRenderingContext2D,
+        width: number,
+        height: number
+    ): void {
+        const imageData = context.getImageData(0, 0, width, height)
+        const data = imageData.data
+
+        for (let index = 0; index < data.length; index += 4) {
+            const isForeground =
+                data[index] > BrushLabelsExporter.BINARY_THRESHOLD ||
+                data[index + 1] > BrushLabelsExporter.BINARY_THRESHOLD ||
+                data[index + 2] > BrushLabelsExporter.BINARY_THRESHOLD
+
+            const value = isForeground ? 255 : 0
+
+            data[index] = value
+            data[index + 1] = value
+            data[index + 2] = value
+            data[index + 3] = 255
+        }
+
+        context.putImageData(imageData, 0, 0)
     }
 
     private static getAnnotationId(index: number): string {

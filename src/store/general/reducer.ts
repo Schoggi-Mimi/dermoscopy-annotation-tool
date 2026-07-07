@@ -17,7 +17,7 @@ const initialState: GeneralState = {
         name: 'derm-annotation',
     },
     zoom: ViewPointSettings.MIN_ZOOM,
-    brushRadiusImagePx: 18,
+    brushRadiusImagePx: 6,
 };
 
 export function generalReducer(

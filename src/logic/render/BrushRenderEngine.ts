@@ -25,8 +25,8 @@ export class BrushRenderEngine extends BaseRenderEngine {
     private activeStrokePointsOnImage: IPoint[] = []
     private isPainting = false
 
-    private readonly minPointDistanceImagePx = 2
-    private readonly pointDistanceToRadiusRatio = 0.35
+    private readonly minPointDistanceImagePx = 1
+    private readonly pointDistanceToRadiusRatio = 0.25
 
     private getMinPointDistanceImagePx(): number {
         return Math.max(
