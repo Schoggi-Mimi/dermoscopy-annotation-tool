@@ -64,14 +64,15 @@ const MainView: React.FC = () => {
                         <h1>Dermoscopy Annotation Tool</h1>
                         <h2>Clinical region annotations for a master&apos;s thesis</h2>
                         <p>
-                            This local web tool is used to annotate clinically relevant regions in melanoma dermoscopy images.
+                            This local web tool is used to annotate clinically relevant regions in dermoscopy images.
                             Images stay in the browser and are not uploaded to a server.
                         </p>
                         <ol>
                             <li>Click <strong>Get Started</strong>.</li>
                             <li>Upload the dermoscopy images.</li>
-                            <li>Start region annotation and draw polygon regions.</li>
-                            <li>Export the masks and CSV summary when finished.</li>
+                            <li>Select a label and adjust the brush size.</li>
+                            <li>Paint clinically relevant regions with the brush tool.</li>
+                            <li>Export the binary masks and CSV summary when finished.</li>
                         </ol>
                     </div>
                 </div>

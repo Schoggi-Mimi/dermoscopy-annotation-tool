@@ -86,12 +86,12 @@ const ImagesDropZone: React.FC<IProps> = (props: PropsWithChildren<IProps>) => {
             </div>
             <div className='DropZoneButtons'>
                 <TextButton
-                    label={'Start Region Annotation'}
+                    label={'Start Annotation'}
                     isDisabled={!acceptedFiles.length}
                     onClick={startEditorWithRegionAnnotation}
                 />
                 <TextButton
-                    label={'Concept Annotation Coming Soon'}
+                    label={'Additional Annotation Modes Coming Soon'}
                     isDisabled={true}
                     onClick={() => null}
                 />
