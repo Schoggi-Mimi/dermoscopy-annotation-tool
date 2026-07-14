@@ -5,16 +5,41 @@
   justify-content: center;
   align-content: center;
   align-items: center;
+
   border-radius: 50%;
   box-sizing: border-box;
   transition: background-color 0.7s ease;
   margin: 5px 2px;
 
-  > img {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+
+  >img,
+  >a>img {
     user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+    cursor: pointer;
   }
 
-  &:hover ~ .Cursor {
+  >a {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    cursor: pointer;
+  }
+
+  &:hover~.Cursor {
     width: 20px;
     height: 20px;
     border-color: transparent;
@@ -22,10 +47,16 @@
   }
 }
 
+.ImageButton.disabled {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
 .ImageButton:not(.disabled):hover {
   cursor: pointer;
 }
 
-.ImageButton:hover {
+.ImageButton:not(.disabled):hover {
   background-color: rgba(255, 255, 255, 0.3);
 }

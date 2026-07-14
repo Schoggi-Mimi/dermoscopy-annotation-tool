@@ -1,4 +1,4 @@
-import {PopupWindowType} from '../data/enums/PopupWindowType';
+import { PopupWindowType } from '../data/enums/PopupWindowType';
 
 export class Settings {
     public static readonly GITHUB_URL: string = 'https://github.com/SkalskiP';
@@ -13,7 +13,7 @@ export class Settings {
     public static readonly SIDE_NAVIGATION_BAR_WIDTH_OPEN_PX: number = Settings.SIDE_NAVIGATION_BAR_WIDTH_CLOSED_PX + 300 + 1;
     public static readonly TOOLKIT_TAB_HEIGHT_PX: number = 40;
     public static readonly TOOLBOX_PANEL_WIDTH_PX: number = 50 + 1;
-    public static readonly MAX_DROPDOWN_OPTION_LENGTH: number = 20;
+    public static readonly MAX_DROPDOWN_OPTION_LENGTH: number = 32;
 
     public static readonly EDITOR_MIN_WIDTH: number = 900;
     public static readonly EDITOR_MIN_HEIGHT: number = 500;

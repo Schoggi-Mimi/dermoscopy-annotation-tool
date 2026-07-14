@@ -12,8 +12,7 @@ import {AppState} from '../../../../store'
 import {connect} from 'react-redux'
 import LabelInputField from '../LabelInputField/LabelInputField'
 import EmptyLabelList from '../EmptyLabelList/EmptyLabelList'
-import {findLast, truncate} from 'lodash'
-import {Settings} from '../../../../settings/Settings'
+import {findLast} from 'lodash'
 import {updateBrushRadiusImagePx} from '../../../../store/general/actionCreators'
 
 interface IProps {
@@ -46,13 +45,18 @@ const BrushLabelsList: React.FC<IProps> = (
     }
 ) => {
     const labelInputFieldHeight = 40
-    const activeSelectorHeight = 46
     const brushSizeControlHeight = 54
+    const labelPaletteHeaderHeight = 28
+    const labelPaletteOptionHeight = 32
+    const maxLabelPaletteHeight = 390
     const brushRadiusMin = 1
     const brushRadiusMax = 30
     const labelBrushes = imageData.labelBrushes || []
 
-    const activeLabelName = findLast(labelNames, {id: activeLabelNameId})
+    const labelPaletteHeight = Math.min(
+        maxLabelPaletteHeight,
+        labelPaletteHeaderHeight + labelNames.length * labelPaletteOptionHeight
+    )
 
     const listStyle: React.CSSProperties = {
         width: size.width,
@@ -64,15 +68,24 @@ const BrushLabelsList: React.FC<IProps> = (
         height: labelBrushes.length * labelInputFieldHeight
     }
 
+    const selectActiveLabelName = (labelNameId: string) => {
+        updateActiveLabelNameIdAction(labelNameId)
+        updateActiveLabelIdAction(null)
+    }
+
     const deleteBrushLabelById = (labelBrushId: string) => {
+        const newLabelBrushes = labelBrushes.filter((labelBrush: LabelBrush) =>
+            labelBrush.id !== labelBrushId
+        )
+
         const newImageData: ImageData = {
             ...imageData,
-            labelBrushes: labelBrushes.filter((labelBrush: LabelBrush) => labelBrush.id !== labelBrushId)
+            labelBrushes: newLabelBrushes
         }
 
         updateImageDataByIdAction(imageData.id, newImageData)
 
-        if (activeLabelId === labelBrushId) {
+        if (activeLabelId === labelBrushId || newLabelBrushes.length === 0) {
             updateActiveLabelIdAction(null)
         }
     }
@@ -158,34 +171,57 @@ const BrushLabelsList: React.FC<IProps> = (
     const renderActiveBrushSelector = () => {
         return (
             <div
-                className='ActiveBrushSelector'
+                className='BrushLabelPalette'
                 style={{
                     width: size.width,
-                    height: activeSelectorHeight
+                    height: labelPaletteHeight
                 }}
                 onClick={(event) => event.stopPropagation()}
             >
                 <div
-                    className='ActiveBrushMarker'
-                    style={activeLabelName ? {backgroundColor: activeLabelName.color} : {}}
-                />
-                <select
-                    className='ActiveBrushSelect'
-                    value={activeLabelNameId || ''}
-                    onChange={(event) => {
-                        updateActiveLabelNameIdAction(event.target.value)
-                        updateActiveLabelIdAction(null)
+                    className='BrushLabelPaletteHeader'
+                    style={{
+                        height: labelPaletteHeaderHeight
                     }}
                 >
-                    {labelNames.map((labelName: LabelName) => (
-                        <option
-                            key={labelName.id}
-                            value={labelName.id}
-                        >
-                            {truncate(labelName.name, {length: Settings.MAX_DROPDOWN_OPTION_LENGTH})}
-                        </option>
-                    ))}
-                </select>
+                    Annotation label
+                </div>
+                <div className='BrushLabelPaletteScroll'>
+                    <Scrollbars>
+                        <div className='BrushLabelPaletteContent'>
+                            {labelNames.map((labelName: LabelName) => {
+                                const isActive = labelName.id === activeLabelNameId
+
+                                return (
+                                    <button
+                                        type='button'
+                                        key={labelName.id}
+                                        className={isActive ? 'BrushLabelOption active' : 'BrushLabelOption'}
+                                        style={{
+                                            height: labelPaletteOptionHeight
+                                        }}
+                                        onClick={() => selectActiveLabelName(labelName.id)}
+                                    >
+                                        <span
+                                            className='BrushLabelOptionMarker'
+                                            style={{
+                                                backgroundColor: labelName.color
+                                            }}
+                                        />
+                                        <span className='BrushLabelOptionName'>
+                                            {labelName.name}
+                                        </span>
+                                        {isActive && (
+                                            <span className='BrushLabelOptionCheck'>
+                                                ✓
+                                            </span>
+                                        )}
+                                    </button>
+                                )
+                            })}
+                        </div>
+                    </Scrollbars>
+                </div>
             </div>
         )
     }
@@ -244,24 +280,29 @@ const BrushLabelsList: React.FC<IProps> = (
         <div
             className='BrushLabelsList'
             style={listStyle}
-            onClickCapture={onClickHandler}
+            onClick={onClickHandler}
         >
             {renderActiveBrushSelector()}
             {renderBrushSizeControl()}
-            {labelBrushes.length === 0 ?
-                <EmptyLabelList
-                    labelBefore={'paint your first brush annotation'}
-                    labelAfter={'no brush annotations created for this image yet'}
-                /> :
-                <Scrollbars>
-                    <div
-                        className='BrushLabelsListContent'
-                        style={listStyleContent}
-                    >
-                        {getChildren()}
-                    </div>
-                </Scrollbars>
-            }
+            <div className='BrushAnnotationsPanel'>
+                <div className='BrushAnnotationsHeader'>
+                    Annotations
+                </div>
+                {labelBrushes.length === 0 ?
+                    <EmptyLabelList
+                        labelBefore={'paint your first brush annotation'}
+                        labelAfter={'no brush annotations created for this image yet'}
+                    /> :
+                    <Scrollbars>
+                        <div
+                            className='BrushLabelsListContent'
+                            style={listStyleContent}
+                        >
+                            {getChildren()}
+                        </div>
+                    </Scrollbars>
+                }
+            </div>
         </div>
     )
 }

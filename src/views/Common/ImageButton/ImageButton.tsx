@@ -1,74 +1,113 @@
-import * as React from 'react';
-import {ISize} from '../../../interfaces/ISize';
-import './ImageButton.scss';
-import classNames from 'classnames';
-import {LegacyRef} from 'react';
+import classNames from 'classnames'
+import * as React from 'react'
+import { LegacyRef } from 'react'
+import { ISize } from '../../../interfaces/ISize'
+import './ImageButton.scss'
 
 export interface ImageButtonProps extends React.HTMLProps<HTMLDivElement> {
-    buttonSize: ISize,
-    padding?: number;
-    image: string,
-    imageAlt: string,
+    buttonSize: ISize
+    padding?: number
+    image: string
+    imageAlt: string
     href?: string
-    onClick?: () => any;
+    onClick?: () => any
     style?: React.CSSProperties
-    isActive?: boolean;
-    isDisabled?: boolean;
-    externalClassName?: string;
+    isActive?: boolean
+    isDisabled?: boolean
+    externalClassName?: string
 }
 
 export const ImageButton = React.forwardRef((props: ImageButtonProps, ref: LegacyRef<HTMLDivElement>) => {
-    const {buttonSize, padding, image, imageAlt, href, onClick, style, isActive, isDisabled, externalClassName} = props;
-    const imagePadding: number = !!padding ? padding : 10;
+    const {
+        buttonSize,
+        padding,
+        image,
+        imageAlt,
+        href,
+        onClick,
+        style,
+        isActive,
+        isDisabled,
+        externalClassName
+    } = props
+
+    const imagePadding: number = !!padding ? padding : 10
+
+    const onMouseDownHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.preventDefault()
+        event.stopPropagation()
+    }
 
     const onClickHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        event.stopPropagation();
-        !!onClick && onClick();
-    };
+        event.stopPropagation()
+
+        if (isDisabled) {
+            event.preventDefault()
+            return
+        }
+
+        if (onClick) {
+            onClick()
+        }
+    }
 
     const buttonStyle: React.CSSProperties = {
         ...style,
         width: buttonSize.width,
         height: buttonSize.height
-    };
+    }
 
     const imageStyle: React.CSSProperties = {
         maxWidth: buttonSize.width - imagePadding,
         maxHeight: buttonSize.height - imagePadding
-    };
+    }
 
     const getClassName = () => {
         return classNames(
             'ImageButton',
             externalClassName,
             {
-                'active': isActive,
-                'disabled': isDisabled,
+                active: isActive,
+                disabled: isDisabled
             }
-        );
-    };
+        )
+    }
 
-    return(
+    return (
         <div
             className={getClassName()}
             style={buttonStyle}
+            onMouseDown={onMouseDownHandler}
             onClick={onClickHandler}
             ref={ref}
+            role='button'
+            aria-label={imageAlt}
+            tabIndex={isDisabled ? -1 : 0}
         >
-            {!!href && <a href={href} style={imageStyle} target='_blank' rel='noopener noreferrer'>
+            {!!href && (
+                <a
+                    href={href}
+                    style={imageStyle}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    draggable={false}
+                >
+                    <img
+                        draggable={false}
+                        alt={imageAlt}
+                        src={image}
+                        style={imageStyle}
+                    />
+                </a>
+            )}
+            {!href && (
                 <img
                     draggable={false}
                     alt={imageAlt}
                     src={image}
                     style={imageStyle}
                 />
-            </a>}
-            {!href && <img
-                draggable={false}
-                alt={imageAlt}
-                src={image}
-                style={imageStyle}
-            />}
+            )}
         </div>
-    );
-});
+    )
+})

@@ -11,12 +11,61 @@ const initialState: LabelsState = {
     imagesData: [],
     firstLabelCreatedFlag: true,
     labels: [
-        { id: 'diagnostic_region', name: 'diagnostic_region', color: '#FF0000' },
-        { id: 'suspicious_pigment', name: 'suspicious_pigment', color: '#FF9900' },
-        { id: 'irregular_border', name: 'irregular_border', color: '#00AAFF' },
-        { id: 'asymmetry_region', name: 'asymmetry_region', color: '#AA00FF' },
-        { id: 'structure_pattern_region', name: 'structure_pattern_region', color: '#00CC66' },
-        { id: 'artifact_ignore', name: 'artifact_ignore', color: '#999999' }
+        {
+            id: 'diagnostic_region',
+            name: 'Diagnostic region',
+            color: '#FF0000'
+        },
+        {
+            id: 'atypical_network',
+            name: 'Atypical network',
+            color: '#FF9900'
+        },
+        {
+            id: 'atypical_dots',
+            name: 'Atypical dots',
+            color: '#FFD500'
+        },
+        {
+            id: 'structureless_area',
+            name: 'Structureless area',
+            color: '#AA00FF'
+        },
+        {
+            id: 'regression',
+            name: 'Regression',
+            color: '#00C2FF'
+        },
+        {
+            id: 'atypical_vascular_pattern',
+            name: 'Atypical vascular pattern',
+            color: '#FF37C7'
+        },
+        {
+            id: 'atypical_streaks',
+            name: 'Atypical streaks',
+            color: '#344593'
+        },
+        {
+            id: 'regular_network',
+            name: 'Regular network',
+            color: '#48F90A'
+        },
+        {
+            id: 'homogeneous',
+            name: 'Homogeneous',
+            color: '#92CC17'
+        },
+        {
+            id: 'globular_network',
+            name: 'Globular network',
+            color: '#00D4BB'
+        },
+        {
+            id: 'artifact_to_ignore',
+            name: 'Artifact to ignore',
+            color: '#999999'
+        }
     ]
 };
 

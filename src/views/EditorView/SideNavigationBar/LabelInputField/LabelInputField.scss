@@ -21,11 +21,16 @@
     .Marker {
       margin-left: 10px;
       width: 24px;
+      min-width: 24px;
       height: 24px;
+      border-radius: 3px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.35);
     }
 
     .Content {
       flex: 1;
+      min-width: 0;
       height: 100%;
       padding: 0 10px;
 
@@ -47,23 +52,49 @@
         align-content: center;
       }
 
+      .ActionButtonWrapper {
+        width: 34px;
+        height: 32px;
+        min-width: 34px;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .ContentWrapper:last-child {
+        margin-right: 1 px;
+        margin-left: 1 px;
+        gap: 0 px;
+      }
+
       .DropdownLabel {
         position: relative;
         font-size: 14px;
         cursor: pointer;
         user-select: none;
-        width: 150px;
+        width: 160px;
         height: 30px;
         padding: 0 5px;
         color: white;
+        box-sizing: border-box;
 
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
 
         overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
 
         &:hover {
           &::after {
@@ -76,7 +107,7 @@
           width: 100%;
           position: absolute;
           bottom: 0;
-          height: 1px;    // <- adjust
+          height: 1px;
           left: 0;
           z-index: 100;
           display: block;
@@ -88,13 +119,16 @@
         position: fixed;
         z-index: 1000;
         background-color: $darkThemeFirstColor;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+        box-sizing: border-box;
 
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: center;
-        align-items: center;
-        align-content: center;
+        align-items: stretch;
+        align-content: stretch;
 
         .DropdownOption {
           align-self: stretch;
@@ -104,25 +138,50 @@
           flex-wrap: nowrap;
           justify-content: flex-start;
           align-items: center;
-          align-content: flex-start;
+          align-content: center;
 
           font-size: 14px;
           cursor: pointer;
           user-select: none;
-          padding: 0 10px;
+          padding: 0 8px;
           color: white;
+          box-sizing: border-box;
+          min-width: 0;
 
           &:hover {
             background-color: $darkThemeThirdColor;
           }
         }
+
+        .DropdownOptionMarker {
+          width: 14px;
+          min-width: 14px;
+          height: 14px;
+          margin-right: 8px;
+          border-radius: 3px;
+          box-sizing: border-box;
+          border: 1px solid rgba(255, 255, 255, 0.35);
+        }
+
+        .DropdownOptionName {
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
 
       .ImageButton {
         transition: transform 0.3s;
+        cursor: pointer;
+        pointer-events: auto;
+        margin: 0;
 
         img {
           filter: brightness(0) invert(1);
+          cursor: pointer;
+          pointer-events: none;
         }
 
         &:hover {
@@ -130,7 +189,7 @@
         }
 
         &.icon:not(.disabled):hover {
-          filter: brightness(35%) sepia(100%) hue-rotate(172deg) saturate(2000%); // fallback if new css variables are not supported by browser
+          filter: brightness(35%) sepia(100%) hue-rotate(172deg) saturate(2000%);
           filter: brightness(35%) sepia(100%) hue-rotate(var(--hue-value)) saturate(2000%);
         }
       }
